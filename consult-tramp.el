@@ -5,7 +5,7 @@
 ;; Author: Aya Igarashi
 ;; URL: https://github.com/Ladicle/consult-tramp
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "26.1") (consult "0.16") (tramp "2.5.2"))
+;; Package-Requires: ((emacs "26.1") (consult "0.16"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,8 +23,6 @@
 ;;; Commentary:
 
 ;; consult-tramp provides interfaces of Tramp
-;; You can also use tramp with consult interface as root
-;; If you use it with docker-tramp, you can also use docker with consult interface
 
 ;;; Code:
 
@@ -35,52 +33,52 @@
   :group 'consult)
 
 (defcustom consult-tramp-method "scpx"
-  "Default method"
+  "Default tramp method."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-ssh-config "~/.ssh/config"
-  "Path to the ssh configuration"
+  "Path to the ssh configuration."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-enable-shosts t
-  "Use known_hosts for completion"
+  "Use known_hosts as a completion source."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-known-hosts "~/.ssh/known_hosts"
-  "Path to the ssh configuration"
+  "Path to the ssh configuration."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-enable-docker t
-  "Use docker containers for completion"
+  "Use docker containers as a completion source."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-path "~"
-  "Initial directory when connecting."
+  "Path to connect to."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-docker-path "/"
-  "Initial directory when connecting with /docker:<container>:."
+  "Path to connect to the docker container."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-sudo-path "/"
-  "Initial directory when connecting with /sudo:root@localhost:."
+  "Path to connect to the local root."
   :group 'consult-tramp
   :type 'string)
 
 (defcustom consult-tramp-extra-targets '()
-  "A list to manually add extra targets."
+  "Fixed list of tramp targets."
   :group 'consult-tramp
   :type 'string)
 
 (defun consult-tramp--candidates ()
-  "Generate tramp candidates from ssh configuration, docker and extra targets."
+  "Generate tramp candidates."
   (let ((hosts consult-tramp-extra-targets))
     ;; SSH config
     (dolist (cand (tramp-parse-sconfig consult-tramp-ssh-config))
