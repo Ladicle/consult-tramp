@@ -4,6 +4,8 @@ This package provides `consult-tramp` command to select tramp targets.
 Supported completion sources are ssh config, known hosts, and docker
 containers.
 
+![screenshot](./screenshot.png)
+
 ## Installation
 
 ```emacs-lisp
