@@ -30,6 +30,8 @@
 (require 'tramp)
 
 (defgroup consult-tramp nil
+  "Tramp interface using consult."
+  :prefix "consult-tramp-"
   :group 'consult)
 
 (defcustom consult-tramp-method "scpx"
