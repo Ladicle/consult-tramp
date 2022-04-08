@@ -1,0 +1,45 @@
+#+title: README
+
+This package provides an interface be able to interact with remote hosts via
+consult and tramp. Candidates are selected from a number of pre-defined sources
+which currently are:
+
+- User's SSH config file (defined via =consult-tramp-ssh-config=)
+- User's known hosts file (defined via =consult-tramp-known-hosts=)
+- Currently running docker containers
+
+It's also possible to include/exclude these sources at the user's will.
+
+For creating other sources, reference the current examples to create a new
+source and add it to the =consult-tramp-sources= list.
+
+Also see  [[https://github.com/minad/consult][consult]] documentation for further reading and explanation.
+
+After selecting a host, the default action defined by
+=consult-tramp-default-action= will be called using the
+defined host as the =default-directory=. If prefix arg is specified, then the
+function will be called interactively.
+
+The default path for all hosts is specified via =consult-tramp-path=
+(=consult-tramp-docker-path=  for Docker containers), but this is currently a
+global setting.
+
+[[file:.github/assets/screenshot.png]]
+
+The above shows a (blurred for privacy) example. Upon entering one of the narrow
+keys for =L= ocal, =S= SH config, =K= nown hosts or =D= ocker; only that kind of host
+will be shown.
+
+* Installation
+
+Install using your package manager of choice, an example use-package & straight
+recipe might look like:
+
+#+begin_src emacs-lisp
+(use-package consult-tramp
+  :recipe (:host github :repo "Ladicle/consult-tramp"))
+#+end_src
+
+If you want docker candidates to show up, you will also have to include
+[[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]]. If not, it might be preferable to adjust =consult-tramp-sources= to
+remove the docker source.
