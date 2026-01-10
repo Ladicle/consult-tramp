@@ -39,10 +39,10 @@
   :group 'consult-tramp
   :type 'string)
 
-(defcustom consult-tramp-ssh-config "~/.ssh/config"
-  "Path to the ssh configuration."
+(defcustom consult-tramp-ssh-config '("~/.ssh/config" "~/.ssh/config.d/*")
+  "List of paths or glob patterns for SSH configurations."
   :group 'consult-tramp
-  :type 'string)
+  :type '(repeat string))
 
 (defcustom consult-tramp-enable-shosts t
   "Use known_hosts as a completion source."
@@ -79,17 +79,33 @@
   :group 'consult-tramp
   :type 'string)
 
+(defun consult-tramp--expand-ssh-configs (patterns)
+  "Expand PATTERNS (list of paths/globs) to actual file paths.
+PATTERNS can be a string (for backward compatibility) or a list of strings."
+  (let ((files '())
+        (pattern-list (if (stringp patterns) (list patterns) patterns)))
+    (dolist (pattern pattern-list)
+      (let* ((expanded-pattern (expand-file-name pattern))
+             (matched (file-expand-wildcards expanded-pattern)))
+        (if matched
+            (dolist (file matched)
+              (push file files))
+          (when (file-exists-p expanded-pattern)
+            (push expanded-pattern files)))))
+    (delete-dups (nreverse files))))
+
 (defun consult-tramp--candidates ()
   "Generate tramp candidates."
   (let ((hosts consult-tramp-extra-targets))
     ;; SSH config
-    (dolist (cand (tramp-parse-sconfig consult-tramp-ssh-config))
-      (let ((user (if (car cand) (concat (car cand) "@")))
-            (host (car (cdr cand))))
-        (if host
-            (push (concat "/" consult-tramp-method
-                          ":" user host
-                          ":" consult-tramp-path) hosts))))
+    (dolist (config-file (consult-tramp--expand-ssh-configs consult-tramp-ssh-config))
+      (dolist (cand (tramp-parse-sconfig config-file))
+        (let ((user (if (car cand) (concat (car cand) "@")))
+              (host (car (cdr cand))))
+          (if host
+              (push (concat "/" consult-tramp-method
+                            ":" user host
+                            ":" consult-tramp-path) hosts)))))
     ;; Known hosts
     (when consult-tramp-enable-shosts
       (dolist (cand (tramp-parse-shosts consult-tramp-known-hosts))

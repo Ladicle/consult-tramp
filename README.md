@@ -19,7 +19,7 @@ containers.
 ## Customization
 
 - consult-tramp-method: (default: `scpx`)
-- consult-tramp-ssh-config:  (default: `~/.ssh/config`)
+- consult-tramp-ssh-config:  (default: `'("~/.ssh/config")`) - List of paths or glob patterns (e.g., `'("~/.ssh/config" "~/.ssh/conf.d/*")`)
 - consult-tramp-enable-shosts: (default: `t`)
 - consult-tramp-known-hosts: (default: `~/.ssh/known_hosts`)
 - consult-tramp-enable-docker: (default: `t`)
